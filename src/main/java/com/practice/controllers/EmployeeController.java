@@ -1,11 +1,13 @@
 package com.practice.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.practice.entities.Employee;
 import com.practice.service.EmployeeService;
 
 @RestController
@@ -15,10 +17,7 @@ public class EmployeeController {
 	EmployeeService empService;
 	
 	 @RequestMapping(value = "employee/search", method = RequestMethod.GET)
-	 public ModelAndView search() throws Exception {
-		 ModelAndView mov=new ModelAndView();
-		 mov.setViewName("employee-search");
-		 mov.addObject("emp-list", empService.findAllEmployees());
-		 return mov;
+	 public List<Employee> search() throws Exception {
+		 return empService.findAllEmployees();
 	 }
 }
