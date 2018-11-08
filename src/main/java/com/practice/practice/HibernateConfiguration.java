@@ -1,15 +1,15 @@
-package com.practice.configuration;
+package com.practice.practice;
 import java.util.Properties;
- 
+
 import javax.sql.DataSource;
- 
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -21,11 +21,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource(value = { "classpath:application.yml" })
 public class HibernateConfiguration {
  
-    @Autowired
-    private Environment environment;
- 
+	@Autowired
+	DataSourceProperties configs;
+	
+	
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
+    	
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan(new String[] { "com.practice.entities" });
@@ -36,16 +38,16 @@ public class HibernateConfiguration {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
-        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
-        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
-        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
+        dataSource.setDriverClassName(configs.getDriverClassName());
+        dataSource.setUrl(configs.getUrl());
+        dataSource.setUsername(configs.getUsername());
+        dataSource.setPassword(configs.getPassword());
         return dataSource;
     }
      
     private Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", true);
+        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         properties.put("hibernate.show_sql", true);
         properties.put("hibernate.format_sql", true);
         return properties;        
